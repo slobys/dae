@@ -42,6 +42,13 @@ type Marshaller struct {
 	buf         bytes.Buffer
 }
 
+// Bytes returns an independent copy of the marshalled content. dae-wing uses
+// this after serializing a single global section. Do not force callers to
+// marshal unrelated DNS/routing sections to read an already built section.
+func (m *Marshaller) Bytes() []byte {
+	return bytes.Clone(m.buf.Bytes())
+}
+
 func (m *Marshaller) writeLine(depth int, line string) {
 	if depth < 0 {
 		depth = 0
